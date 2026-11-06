@@ -25,7 +25,7 @@ public class BedHandler : MonoBehaviour
             if(EnemySpawner.instance.currentEnemies.Count == 0) {
                 if (startNewWave.action.triggered) {
 
-                    if (DebugConsole.Instance != null) { if (DebugConsole.Instance.inputIsFocused == true) { return; } } // No bindings when Debug-Console is focused
+                    if (RemoraDevConsole.GameplayInputBlocked()) { return; }
 
                     waveStartParticles.Play();
                     EnemySpawner.instance.SpawnWave();

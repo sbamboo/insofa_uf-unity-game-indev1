@@ -58,12 +58,10 @@ public class InputHandler : MonoBehaviour {
 
     //Should be called after input is taken, hopefully (logic to avoid double inputs are here)
     private void Update() {
-        if (DebugConsole.Instance != null) {
-            if (DebugConsole.Instance.inputIsFocused == true) {
-                playerController.takeInput(Vector2.zero);
-                playing = false;
-                return;
-            } // No bindings when Debug-Console is focused
+        if (RemoraDevConsole.GameplayInputBlocked()) {
+            playerController.takeInput(Vector2.zero);
+            playing = false;
+            return;
         }
 
         playing = true;
@@ -75,12 +73,10 @@ public class InputHandler : MonoBehaviour {
     }
 
     private void PlayerUseHandler(InputAction.CallbackContext obj) {
-        if (DebugConsole.Instance != null) {
-            if (DebugConsole.Instance.inputIsFocused == true) {
-                playerController.takeInput(Vector2.zero);
-                playing = false;
-                return;
-            }
+        if (RemoraDevConsole.GameplayInputBlocked()) {
+            playerController.takeInput(Vector2.zero);
+            playing = false;
+            return;
         }
 
         if (isHoveringButton && PlatformInputHandler.Instance.currentInputScheme == PlatformInputHandler.SCHEME_MnK && playing){
@@ -90,7 +86,7 @@ public class InputHandler : MonoBehaviour {
     }
 
     private void SwitchMeleeModeHandler(InputAction.CallbackContext obj) {
-        if (DebugConsole.Instance != null) { if (DebugConsole.Instance.inputIsFocused == true) { return; } } // No bindings when Debug-Console is focused
+        if (RemoraDevConsole.GameplayInputBlocked()) { return; }
 
         bool newIsMeleeMode = !playerHand.isMeleeMode;
         if (newIsMeleeMode) {

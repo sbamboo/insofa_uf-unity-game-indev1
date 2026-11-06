@@ -145,7 +145,7 @@ public class PlayerHand : MonoBehaviour {
 
     public void takeInput(Vector2 cursor, string currentControlScheme)
     {
-         if (DebugConsole.Instance != null) { if (DebugConsole.Instance.inputIsFocused == true) { return; } } // No bindings when Debug-Console is focused
+         if (RemoraDevConsole.GameplayInputBlocked()) { return; }
 
         if (currentControlScheme == "MnK") {
             Vector2 mousePos = lookInput.action.ReadValue<Vector2>();
@@ -280,7 +280,7 @@ public class PlayerHand : MonoBehaviour {
 
     //Playernode and placement node check is done in the grid logic
     private void placeBuilding() {
-        if (DebugConsole.Instance != null) { if (DebugConsole.Instance.inputIsFocused == true) { return; } } // No bindings when Debug-Console is focused
+        if (RemoraDevConsole.GameplayInputBlocked()) { return; }
         int buildingCost = (int)Math.Round(
             buildings[selectedBuilding].buildingCost * GlobalBuyInflationMultiplier,
             MidpointRounding.AwayFromZero
@@ -328,7 +328,7 @@ public class PlayerHand : MonoBehaviour {
         slashEffect.transform.right = lookDir;
     }
     public void removeBuilding(InputAction.CallbackContext obj) {
-        if (DebugConsole.Instance != null) { if (DebugConsole.Instance.inputIsFocused == true) { return; } } // No bindings when Debug-Console is focused
+        if (RemoraDevConsole.GameplayInputBlocked()) { return; }
 
         int? sellAmount = PathfindingGrid.instance.RemoveBuilding(buildPos);
         if(sellAmount != null) {

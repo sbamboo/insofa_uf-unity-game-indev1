@@ -283,7 +283,7 @@ public class UIHandler : MonoBehaviour
     {
         if (currentScene == 1)
         {
-            if (DebugConsole.Instance != null) { if (DebugConsole.Instance.inputIsFocused == true) { return; } } // No bindings when Debug-Console is focused
+            if (RemoraDevConsole.GameplayInputBlocked()) { return; }
             debugOverlay.SetActive(!debugOverlay.activeSelf);
         }
 

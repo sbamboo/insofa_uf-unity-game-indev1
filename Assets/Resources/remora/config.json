@@ -1,0 +1,15 @@
+{
+    "format": 1,
+    "versions": {
+        "remora": "v0.0"
+    },
+    "dev-console": {
+        "config": {
+            "font-size": 32,
+            "log-dlog": false,
+            "panel-width": 1756,
+            "panel-height": 1048,
+            "startup-command": "print \"\\u001b[32mRemora Dev Console {versions.remora}\\u001b[m\""
+        }
+    }
+}
