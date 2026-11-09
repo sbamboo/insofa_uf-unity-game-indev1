@@ -9,7 +9,7 @@ public class DebugConsole_GridSerializer : MonoBehaviour {
     * {
     *     "version": {
     *         "format": 0,
-    *         "game": <0.4>,
+    *         "game": <0.5>,
     *         "unity": <6000.0.40f1>
     *     },
     *     "supported": false,
@@ -26,7 +26,7 @@ public class DebugConsole_GridSerializer : MonoBehaviour {
 
     public static List<int> ValidFormatVersions = new List<int> { 0 };
     // Valid string versions can be "<entry>", "!<entry>" or "*" aswell as using ~ < > for ranges.
-    public static List<string> ValidGameVersions = new List<string> { "0.4" };
+    public static List<string> ValidGameVersions = new List<string> { "0.5" };
     public static List<string> ValidUnityVersions = new List<string> { "*" };
 
     public static bool IsValidFormatVersion(int version) {
@@ -240,7 +240,17 @@ public class DebugConsole_GridSerializer : MonoBehaviour {
                     // Check if building has BuildingHealth component, if so get the buildingScriptableObject from it and use it to get index
                     BuildingHealth buildingHealth = node.building.GetComponent<BuildingHealth>();
                     if (buildingHealth != null) {
-                        nodeData["building"] = buildingHealth.buildingIndex;
+                        int index = -1;
+                        BuildingScriptableObject so = buildingHealth.buildingScriptableObject;
+                        if (so != null) {
+                            for (int i = 0; i < buildings.Length; i++) {
+                                if (buildings[i] == so) {
+                                    index = i;
+                                    break;
+                                }
+                            }
+                        }
+                        nodeData["building"] = index;
                         // Get health
                         nodeData["building_health"] = buildingHealth.currentHealth;
 
@@ -321,6 +331,17 @@ public class DebugConsole_GridSerializer : MonoBehaviour {
                 float worldX = serializedGridEntry["world.x"].Value<float>();
                 float worldY = serializedGridEntry["world.y"].Value<float>();
                 int buildingIndex = serializedGridEntry["building"].Value<int>();
+                if (buildingIndex < 0) {
+                    string buildingName = serializedGridEntry["building_name"]?.Value<string>();
+                    if (!string.IsNullOrEmpty(buildingName)) {
+                        for (int i = 0; i < buildings.Length; i++) {
+                            if (buildings[i] != null && buildings[i].buildingName == buildingName) {
+                                buildingIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                }
                 bool isBed = serializedGridEntry["isbed"].Value<bool>();
                 if (x < 0 || x >= grid.GetLength(0) || y < 0 || y >= grid.GetLength(1)) {
                     throw new Exception("Grid entry out of bounds: " + x + ", " + y);
